@@ -1,0 +1,44 @@
+spring:
+  main:
+    banner-mode: "off"
+  application:
+    name: pact-consumer
+  profiles:
+    active: local
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+    time-zone: UTC
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+      base-path: /
+  endpoint:
+    health:
+      show-details: when_authorized
+      enabled: true
+
+provider-service:
+  url: "localhost"
+  port: 8081
+
+feign:
+  hystrix:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: full
+
+logging:
+  level:
+    root: debug
+    de.schroeder: info
