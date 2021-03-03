@@ -1,0 +1,30 @@
+spring:
+  main:
+    banner-mode: "off"
+  profiles:
+    active: local
+  application:
+    name: provider-service
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+    time-zone: UTC
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_ENUMS: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    show_sql: true
+    properties:
+      hibernate:
+        hbm2ddl.auto: create
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+        generate_statistics: false
+    generate-ddl: true

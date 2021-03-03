@@ -3,8 +3,10 @@
 ## What this Project is about
 Example Project to showcase a consumer driven approach to API developement.
 
-# Start
+## What this service represents
+Represents an Consumer for administering Superheroes in Provider-Service.
 
+# Start the programm
 `./gradlew bootRun`
 
 # Build
@@ -21,3 +23,4 @@ Run: `./gradlew pactPublish -Dpact.provider.tag=foo,bar -DpactBrokerUrl=localhos
 
 #TODOs
 * implement canIdeploy example
+* bei zuviel Langeweile ein simples Thymeleaf Frontend um eine Browser AdminOberfläche zu haben

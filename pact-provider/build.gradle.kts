@@ -1,11 +1,24 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.4.31")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:1.4.31")
+    }
+}
+
 plugins {
     id("org.springframework.boot") version "2.4.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.30"
-    kotlin("plugin.spring") version "1.4.30"
-    kotlin("plugin.allopen") version "1.3.61"
+    kotlin("plugin.spring") version "1.4.31"
+    kotlin("plugin.allopen") version "1.4.31"
+    kotlin("plugin.jpa") version "1.4.31"
     id("au.com.dius.pact") version "4.1.6"
 }
 
@@ -13,7 +26,6 @@ group = "de.schroeder"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 extra["pactVersion"] = "4.1.17"
-
 
 repositories {
     mavenCentral()
@@ -44,11 +56,14 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-//    systemProperty("pactbroker.host", "localhost:8090")
+    systemProperty("pactbroker.host", "localhost:8090")
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag")) // how should a verified providertest be tagged?
+    val pactTag = System.getProperty("pact.provider.tag")?: "wip"
+    val projectVersion = System.getProperty("ppact.provider.version")?: project.version
+    systemProperty("pact.provider.version", "$projectVersion")
+    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 }
 

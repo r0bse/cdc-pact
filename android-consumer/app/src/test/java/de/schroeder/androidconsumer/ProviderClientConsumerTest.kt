@@ -25,7 +25,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 
-const val CONSUMER = "pact-consumer"
+const val CONSUMER = "android-consumer"
 const val PROVIDER = "pact-provider"
 
 const val GET_ALL = "at least one superhero exists"
@@ -37,21 +37,17 @@ const val CREATE_ONE = "a superhero, to be created, does not exist"
     providerName = PROVIDER,
     port = "8081" // to use a random port delete this entry (or replace with "0", and rebuild the FeignClient with the mockServer port
 )
-@ExtendWith(PactConsumerTestExt::class, SpringExtension::class)
-@SpringBootTest(classes = [ConsumerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@ExtendWith(PactConsumerTestExt::class)
 class ProviderClientConsumerTest {
 
-    @Value("\${provider-service.url}")
-    lateinit var url: String
-
-    @Autowired
-    lateinit var providerCLient: ProviderClient
+    val url: String = "localhost"
 
     @Pact(
         consumer = CONSUMER,
         provider = PROVIDER
     )
     fun getOneSuperheroPact(builder: PactDslWithProvider): RequestResponsePact {
+
         val responsePayload: DslPart = LambdaDsl.newJsonBody {
                 payload: LambdaDslJsonBody ->
             payload.stringMatcher("name", ".*", "Bruce Wayne")
@@ -63,7 +59,7 @@ class ProviderClientConsumerTest {
             .uponReceiving("a request to get a superhero by id")
             .path("/superheroes/42")
             .method(Request.HttpMethod.GET.name)
-            .headers(ImmutableMap.of("foo", "bar"))
+            .headers(ImmutableMap.of("foo", "bar", HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .willRespondWith()
             .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .body(responsePayload)
@@ -94,12 +90,12 @@ class ProviderClientConsumerTest {
         return builder.given(GET_ALL)
             .uponReceiving("a request to get all superheroes")
             .path("/superheroes")
-            .method(Request.HttpMethod.GET.name)
-            .headers(ImmutableMap.of("foo", "bar"))
+            .method("GET")
+            .headers(ImmutableMap.of("foo", "bar", "Content-Type", "application/json"))
             .willRespondWith()
-            .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+            .headers(ImmutableMap.of("Content-Type", "application/json"))
             .body(responsePayload)
-            .status(HttpStatus.OK.value())
+            .status(200)
             .toPact()
     }
 
