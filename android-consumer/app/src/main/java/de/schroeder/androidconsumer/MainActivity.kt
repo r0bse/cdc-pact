@@ -6,17 +6,20 @@ import android.view.View
 
 class MainActivity() : AppCompatActivity() {
 
-    val requestService: RequestService = RequestService(TableService())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
     }
 
+    /**
+     * on Click
+     */
     fun retrieveSuperheroes(view: View) {
-
-        requestService.callProvider(findViewById(R.id.superhero_table))
+        val tableService = TableService(findViewById(R.id.superhero_table))
+        RetrofitSuperheroRequest(tableService).getSuperheroes()
+//        val requestService = RequestService(tableService, view.context)
+//        requestService.callProvider()
     }
 
 }
