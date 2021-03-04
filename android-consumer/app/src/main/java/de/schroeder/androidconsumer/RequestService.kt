@@ -14,25 +14,29 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
-class RequestService {
+class RequestService(val tableService: TableService) {
 
     val gsonMapper = GsonBuilder().create()
 
     fun callProvider(tableLayout: TableLayout) {
         val queue = Volley.newRequestQueue(tableLayout.context)
         val url = "http://10.0.2.2:8080/superheroes"
+
         // Request a string response from the provided URL.
         val request = JsonArrayRequest(Request.Method.GET, url, null,
-            {
-                val list = gsonMapper.fromJson(it.toString(), Array<Superhero>::class.java).toList()
-                list.forEach { entry -> addTableRow(tableLayout, entry) }
-            },
-            { error ->
-                Log.d("", error.message.toString())
-            })
-        // Add the request to the RequestQueue.
+                {
+                    val list = gsonMapper.fromJson(it.toString(), Array<Superhero>::class.java).toList()
+                    list.forEach { entry -> tableService.addTableRow(tableLayout, entry) }
+                },
+                { error ->
+                    Log.d("", error.message.toString())
+                })
         queue.add(request)
     }
+}
+
+class TableService{
+
 
     fun addTableRow(tableLayout: TableLayout, hero: Superhero) {
 

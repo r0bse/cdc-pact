@@ -31,7 +31,7 @@ const val CREATE_ONE = "a superhero, to be created, does not exist"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-class SuperheroEntityControllerProviderTest{
+class SuperheroControllerProviderTest{
 
     @Autowired
     lateinit var mockMvc : MockMvc

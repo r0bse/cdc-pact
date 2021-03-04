@@ -1,6 +1,6 @@
 package de.schroeder.provider.control
 
-import de.schroeder.provider.entity.SuperheroEntity
+import de.schroeder.provider.entity.Superhero
 import org.springframework.data.jpa.repository.JpaRepository
 
-interface SuperheroRepository : JpaRepository<SuperheroEntity, Long> {}
+interface SuperheroRepository : JpaRepository<Superhero, Long> {}

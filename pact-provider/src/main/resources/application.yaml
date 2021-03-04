@@ -1,8 +1,8 @@
 spring:
   main:
     banner-mode: "off"
-  profiles:
-    active: local
+#  profiles:
+#    active: local
   application:
     name: provider-service
   jackson:
@@ -11,20 +11,49 @@ spring:
     time-zone: UTC
     mapper:
       ACCEPT_CASE_INSENSITIVE_ENUMS: true
+  liquibase:
+    url: ${spring.datasource.url}
+    user: ${postgresql.user.username}
+    password: ${postgresql.user.password}
+    default-schema: ${postgresql.schema.name}
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${postgresql.host}:${postgresql.port}/${postgresql.db.name}
+    username: ${postgresql.user.username}
+    password: ${postgresql.user.password}
   jpa:
     open-in-view: false
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show_sql: true
     properties:
       hibernate:
-        hbm2ddl.auto: create
+        hbm2ddl.auto: validate
+        default_schema: ${postgresql.schema.name}
         cache:
           use_second_level_cache: false
           use_query_cache: false
         generate_statistics: false
     generate-ddl: true
+  h2:
+    console:
+      enabled: true
+
+postgresql:
+  host: localhost
+  port: 5432
+  db:
+    name: provider-database
+  schema:
+    name: public
+  user:
+    username: postgres
+    password: password
+
+logging:
+  level:
+    root: info
+    org.hibernate: debug
+
+testcontainer:
+  dockerRegistryUri: hub.docker.com/
+  dockerImageName: postgres

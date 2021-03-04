@@ -25,7 +25,10 @@ plugins {
 group = "de.schroeder"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
 extra["pactVersion"] = "4.1.17"
+extra["kotlinVersion"] = "1.4.31"
+extra["postgresVersion"] = "42.2.14"
 
 repositories {
     mavenCentral()
@@ -35,16 +38,18 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.github.microutils:kotlin-logging:2.0.4")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-//    implementation("org.liquibase:liquibase-core")
-    implementation("org.jetbrains.kotlin:kotlin-noarg:1.4.30")
-    runtimeOnly("com.h2database:h2")
+    implementation("org.liquibase:liquibase-core")
+    implementation("org.jetbrains.kotlin:kotlin-noarg:${property("kotlinVersion")}")
+    runtimeOnly("org.postgresql:postgresql:${property("postgresVersion")}")
+    testImplementation("org.testcontainers:testcontainers:1.15.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("au.com.dius.pact.provider:spring:${property("pactVersion")}")
     testImplementation("au.com.dius.pact.provider:junit5:${property("pactVersion")}")
-    testCompile("au.com.dius.pact.provider:junit5spring:${property("pactVersion")}")
+    testImplementation("au.com.dius.pact.provider:junit5spring:${property("pactVersion")}")
 }
 
 tasks.withType<KotlinCompile> {

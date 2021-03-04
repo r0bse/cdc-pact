@@ -6,7 +6,7 @@ import android.view.View
 
 class MainActivity() : AppCompatActivity() {
 
-    val requestService: RequestService = RequestService()
+    val requestService: RequestService = RequestService(TableService())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

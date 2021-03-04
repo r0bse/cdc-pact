@@ -1,9 +1,5 @@
 databaseChangeLog:
   - include:
-      file: logs/db.changelog-initialsetup.sql
+      file: logs/db.changelog-1_initialsetup.sql
       relativeToChangelogFile: true
       stripComments: true
-#  - include:
-#      file: logs/db.changelog-initial-data.sql
-#      relativeToChangelogFile: true
-#      stripComments: true

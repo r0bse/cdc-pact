@@ -1,18 +1,18 @@
 package de.schroeder.provider.control
 
-import de.schroeder.provider.entity.SuperheroEntity
+import de.schroeder.provider.entity.Superhero
 import de.schroeder.provider.entity.SuperheroResource
 
-fun SuperheroEntity.toResource() : SuperheroResource{
+fun Superhero.toResource() : SuperheroResource{
 
     return SuperheroResource(this.name!!,
                             this.affiliation!!,
                             this.identity!!)
 }
 
-fun SuperheroResource.toEntity() : SuperheroEntity{
+fun SuperheroResource.toEntity() : Superhero{
 
-    val hero = SuperheroEntity( name = this.name,
+    val hero = Superhero( name = this.name,
                                 affiliation = this.affiliation,
                                 identity = this.secretIdentity)
 
