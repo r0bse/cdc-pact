@@ -1,9 +1,13 @@
-# cdc-pact
+# Consumer Driven Contracting (with Pact)
 
 Example project to showcase a workflow of Consumer Driven Contract Testing with Pact.
 
 Basic premise is a Backend-Service (Provider) which spoiles the identities of superheroes.
 This info is consumed by a Consumer-Service and tested within the build by downloading Pacts from a PactBroker.
+
+# Goals of this project
+Providing an example how to manage several (different) consumers for one Backend API.
+All consumerd and provided APIs will be tested by using Pact, a Pactbroker and canIdeploy.
 
 # Before you start
 
@@ -12,12 +16,18 @@ The docker-compose in the root directory should be run before trying to test the
 It contains a PactBroker and a Postgres Database.
 
 ## Provider-Service
-Needs Postgres DB running in background (with provider-database)
+Needs a Postgres DB running in background (with provider-database). Provided in docker-compose.yml
+
+More description in subfolder.
 
 ## Consumer-Servive
 Can startup on it's own
 Needs Provider-Service for full functionality.
 
+More description in subfolder.
+
 ## Android-Consumer
 Can start on its own. 
 Needs Provider-Service for full functionality.
+
+More description in subfolder.
