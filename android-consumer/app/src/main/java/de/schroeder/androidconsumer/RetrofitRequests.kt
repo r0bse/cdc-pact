@@ -10,22 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-class RetrofitRequests(
-    val tableService: TableService,
-    baseUrl: String
-) : Callback<List<SuperheroResource>> {
-
-    val providerClient: ProviderClient = Retrofit
-        .Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(
-            GsonConverterFactory.create(
-                GsonBuilder()
-                    .setLenient()
-                    .create()
-            )
-        )
-        .build().create(ProviderClient::class.java)
+class RetrofitRequests(val superheroTableManager: SuperheroTableManager,
+                       val providerClient: ProviderClient) : Callback<List<SuperheroResource>> {
 
     fun getSuperheroes(){
         val call: Call<List<SuperheroResource>> = providerClient.getSuperheroes()
@@ -34,14 +20,14 @@ class RetrofitRequests(
 
     override fun onResponse(call: Call<List<SuperheroResource>>, response: Response<List<SuperheroResource>>) {
         if (response.isSuccessful) {
-            return response.body().forEach{ superhero -> tableService.addTableRow(superhero)}
+            superheroTableManager.addSuperheroToTable(response.body())
         } else {
             throw RuntimeException("${response.errorBody()}")
         }
     }
 
     override fun onFailure(call: Call<List<SuperheroResource>>?, t: Throwable) {
-        t.printStackTrace()
+        throw RuntimeException("${t.message}")
     }
 }
 
@@ -54,8 +40,6 @@ interface ProviderClient {
     fun getSuperhero(@Path("id") id: Int): Call<SuperheroResource>
 }
 
-data class SuperheroResource(
-    val name: String,
-    val secretIdentity: String,
-    val affiliation: String
-) : JSONObject()
+data class SuperheroResource(val name: String,
+                             val secretIdentity: String,
+                             val affiliation: String) : JSONObject()
