@@ -31,3 +31,11 @@ Can start on its own.
 Needs Provider-Service for full functionality.
 
 More description in subfolder.
+
+# How do I start?
+* start the docker-compose file
+* change the API or an API-Call
+**  either a call to one by maniupulating the requested Object or the URL
+** or by changing the API within the provider (RequestObject, Headers, URL)
+* run `./gradlew test` in provider-service
+** should fail with complaining about not missing the API contract
