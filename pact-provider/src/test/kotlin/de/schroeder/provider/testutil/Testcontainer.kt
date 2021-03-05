@@ -6,7 +6,10 @@ import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
@@ -30,7 +33,7 @@ class PostgresTestContainerRunner : ApplicationContextInitializer<ConfigurableAp
         logger.debug(String.format("Pulling Image with name: %s", dockerImageName))
         logger.debug(String.format("Creating database: %s:%s", dbName, dbPort))
 
-        val dbContainer: GenericContainer<*> = start(dockerRegistry + dockerImageName, dbName, Integer.valueOf(dbPort))
+        val dbContainer: GenericContainer<Nothing> = start(dockerRegistry + dockerImageName, dbName, Integer.valueOf(dbPort))
         val containerDbPort: Int = dbContainer.getMappedPort(Integer.valueOf(dbPort))
         val containerIpAddress: String = dbContainer.getContainerIpAddress()
         val values = TestPropertyValues.of(
@@ -41,21 +44,33 @@ class PostgresTestContainerRunner : ApplicationContextInitializer<ConfigurableAp
     }
 
     companion object {
-        private lateinit var genericContainer: GenericContainer<*>
+        private lateinit var container: PostgreSQLContainer<Nothing>
 
         /**
          * [GenericContainer.start] should be run in a static method otherwise testcontainer will start and stop a
          * container for each test class
-         * see -> https://www.testcontainers.org/test_framework_integration/manual_lifecycle_control/#singleton-containers
          */
-        private fun start(dockerImageName: String, dbName: String, dbPort: Int): GenericContainer<*> {
-            genericContainer = GenericContainer(dockerImageName)
-                .withExposedPorts(dbPort)
-                .withEnv("POSTGRES_DATABASES", dbName)
-                .withEnv("POSTGRES_PASSWORD", "password")
-                .waitingFor(Wait.forLogMessage(".*database system is ready to accept connections.*\\n", 2))
-            genericContainer.start()
-            return genericContainer
+        private fun start(dockerImageName: String, dbName: String, dbPort: Int): GenericContainer<Nothing> {
+            container = PostgreSQLContainer<Nothing>(dockerImageName)
+            .apply {
+                withDatabaseName(dbName)
+                withUsername("postgres")
+                withPassword("password")
+            }
+            .withExposedPorts(dbPort)
+            container.start()
+            return container
+        }
+
+        /**
+         * overwrite spring application settings
+         */
+        @JvmStatic
+        @DynamicPropertySource
+        fun properties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", container::getJdbcUrl);
+            registry.add("spring.datasource.password", container::getPassword);
+            registry.add("spring.datasource.username", container::getUsername);
         }
     }
 }

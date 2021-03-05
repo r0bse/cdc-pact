@@ -17,6 +17,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget
+import com.ninjasquad.springmockk.MockkBean
+import de.schroeder.provider.control.SuperheroRepository
+import de.schroeder.provider.entity.Superhero
+import io.mockk.every
+import org.springframework.http.ResponseEntity
+import java.util.*
 
 const val GET_ALL = "at least one superhero exists"
 const val GET_ONE = "a requested superhero exists"
@@ -24,7 +30,6 @@ const val GET_ONE = "a requested superhero exists"
 const val CREATE_ONE = "a superhero, to be created, does not exist"
 
 @Provider("pact-provider")
-@Consumer("pact-consumer")
 @PactBroker(
     host = "localhost",
     port = "8090"
@@ -35,6 +40,8 @@ class SuperheroControllerProviderTest{
 
     @Autowired
     lateinit var mockMvc : MockMvc
+    @MockkBean
+    lateinit var superheroRepository: SuperheroRepository
 
     @BeforeEach
     fun before(context: PactVerificationContext) {
@@ -43,10 +50,12 @@ class SuperheroControllerProviderTest{
 
     @State(GET_ONE)
     fun `get one should succeed`() {
+        every{ superheroRepository.findById(any())} returns Optional.of(Superhero("foo", "bar", "foobar"))
     }
 
     @State(GET_ALL)
     fun `get all should succeed`() {
+        every{ superheroRepository.findAll()} returns listOf(Superhero("foo", "bar", "foobar"))
     }
 
     @State(CREATE_ONE)

@@ -45,11 +45,17 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     implementation("org.jetbrains.kotlin:kotlin-noarg:${property("kotlinVersion")}")
     runtimeOnly("org.postgresql:postgresql:${property("postgresVersion")}")
+
+
+    testImplementation("io.mockk:mockk:1.10.6")
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
     testImplementation("org.testcontainers:testcontainers:1.15.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("au.com.dius.pact.provider:spring:${property("pactVersion")}")
     testImplementation("au.com.dius.pact.provider:junit5:${property("pactVersion")}")
     testImplementation("au.com.dius.pact.provider:junit5spring:${property("pactVersion")}")
+    testImplementation ("org.awaitility:awaitility:4.0.3")
+    testImplementation("org.testcontainers:postgresql:1.15.2")
 }
 
 tasks.withType<KotlinCompile> {

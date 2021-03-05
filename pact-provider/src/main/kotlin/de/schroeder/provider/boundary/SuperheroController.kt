@@ -21,7 +21,7 @@ class SuperheroController(val superheroService: SuperheroService){
             .body(heroes)
     }
 
-    @GetMapping("/{id}", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getOne(@PathVariable id: Long): ResponseEntity<SuperheroResource>{
         val hero = superheroService.findOne(id)
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
