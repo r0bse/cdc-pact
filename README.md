@@ -41,3 +41,16 @@ More description in subfolder.
   * should fail with complaining about not missing the API contract
 * run `./gradlew test pactPublish` in a consumer-service
   * should upload the changed pact
+  * a build/test of the provider should fail
+  
+# TODOs
+* ThymeLeaf for Kotlin-Consumer
+* Python-Consumer Example
+* Javascript-Consumer Example
+* PHP-Consumer Example
+
+* Better Doc what this example is about
+  * with sequence diagrams
+  * (maybe) gitTags to checkout a specific step within the workflow
+  * and stepByStep-buildImages
+  * Presentation/Gif/Video to illustatrate

@@ -1,20 +1,21 @@
 package de.schroeder.androidconsumer
 
-import com.google.gson.GsonBuilder
-import org.json.JSONObject
+import dagger.Component
+import de.schroeder.androidconsumer.configuration.RetrofitModule
+import de.schroeder.androidconsumer.superheroes.control.SuperheroTableManager
+import de.schroeder.androidconsumer.superheroes.enitity.SuperheroResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import javax.inject.Inject
 
-class RetrofitRequests(val superheroTableManager: SuperheroTableManager,
-                       val providerClient: ProviderClient) : Callback<List<SuperheroResource>> {
+class RetrofitRequests (val superheroTableManager: SuperheroTableManager,
+                        val retrofitSuperheroClient: RetrofitSuperheroClient) : Callback<List<SuperheroResource>> {
 
     fun getSuperheroes(){
-        val call: Call<List<SuperheroResource>> = providerClient.getSuperheroes()
+        val call: Call<List<SuperheroResource>> = retrofitSuperheroClient.getSuperheroes()
         call.enqueue(this)
     }
 
@@ -31,7 +32,7 @@ class RetrofitRequests(val superheroTableManager: SuperheroTableManager,
     }
 }
 
-interface ProviderClient {
+interface RetrofitSuperheroClient {
 
     @GET("/superheroes")
     fun getSuperheroes(): Call<List<SuperheroResource>>
@@ -39,7 +40,3 @@ interface ProviderClient {
     @GET("/superheroes/{id}")
     fun getSuperhero(@Path("id") id: Int): Call<SuperheroResource>
 }
-
-data class SuperheroResource(val name: String,
-                             val secretIdentity: String,
-                             val affiliation: String) : JSONObject()

@@ -8,17 +8,17 @@ import au.com.dius.pact.consumer.junit5.PactTestFor
 import au.com.dius.pact.core.model.RequestResponsePact
 import au.com.dius.pact.core.model.annotations.Pact
 import com.google.common.collect.ImmutableMap
-import de.schroeder.androidconsumer.ProviderClient
-import de.schroeder.androidconsumer.RetrofitRequests
-import de.schroeder.androidconsumer.TableService
+import com.google.gson.GsonBuilder
+import de.schroeder.androidconsumer.RetrofitSuperheroClient
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import io.pactfoundation.consumer.dsl.LambdaDsl
 import io.pactfoundation.consumer.dsl.LambdaDslJsonArray
 import io.pactfoundation.consumer.dsl.LambdaDslJsonBody
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 const val CONSUMER = "android-consumer"
 const val PROVIDER = "pact-provider"
@@ -31,18 +31,24 @@ const val GET_ONE = "a requested superhero exists"
     port = "0" // random port
 )
 @ExtendWith(PactConsumerTestExt::class)
-class ProviderClientConsumerTest {
+class RetrofitSuperheroClientConsumerTest {
 
-    @MockK(relaxUnitFun = true)
-    lateinit var tableService: TableService
-
-    lateinit var requestClient: ProviderClient
+    lateinit var requestClient: RetrofitSuperheroClient
 
     @BeforeEach
     fun setup(mockServer: MockServer){
         MockKAnnotations.init(this)
 
-        requestClient = RetrofitRequests(tableService, "http://localhost:${mockServer.getPort()}").providerClient
+        requestClient = Retrofit.Builder()
+            .baseUrl("http://localhost:${mockServer.getPort()}")
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .setLenient()
+                        .create()
+                )
+            )
+            .build().create(RetrofitSuperheroClient::class.java)
     }
 
     @Pact(
@@ -56,6 +62,14 @@ class ProviderClientConsumerTest {
             payload.stringMatcher("name", ".*", "Bruce Wayne")
             payload.stringMatcher("secretIdentity", ".*", "Batman")
             payload.stringMatcher("affiliation", ".*", "DC")
+            payload.numberType("age", 41)
+            payload.stringMatcher("adress", ".*", "ask Superman")
+            payload.eachArrayLike("hobbies", 2){
+                    arrayEntry ->
+                    arrayEntry.stringType("Hunting bad guys")
+                    arrayEntry.stringType("Hanging out with Superman")
+
+            }
         }.build()
 
         return builder.given(GET_ONE)
@@ -72,7 +86,7 @@ class ProviderClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getOneSuperheroPact")
     fun `getting one superhero by id should succeed`(mockServer: MockServer) {
-        requestClient.getSuperhero(42).execute()
+        requestClient.getSuperhero(42).execute() //execute synchronously to receive result within test
     }
 
     @Pact(
@@ -102,6 +116,6 @@ class ProviderClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getAllSuperheroesPact")
     fun `getting all superheroes should succeed`(mockServer: MockServer) {
-        requestClient.getSuperheroes().execute()
+        requestClient.getSuperheroes().execute() //execute synchronously to receive result within test
     }
 }

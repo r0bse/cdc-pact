@@ -1,45 +1,12 @@
-package de.schroeder.androidconsumer
+package de.schroeder.androidconsumer.superheroes.control
 
 import android.graphics.Color
-import android.os.Bundle
-import android.view.View
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.GsonBuilder
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import de.schroeder.androidconsumer.superheroes.enitity.SuperheroResource
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
-
-    val providerClient: ProviderClient = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080")
-        .addConverterFactory(
-            GsonConverterFactory.create(
-                GsonBuilder()
-                    .setLenient()
-                    .create()
-            )
-        )
-        .build().create(ProviderClient::class.java)
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-    }
-
-    /**
-     * on Click on Button (defined in xml)
-     */
-    fun retrieveSuperheroes(view: View) {
-        val tableService = TableService(findViewById(R.id.superhero_table))
-        RetrofitRequests(SuperheroTableManager(tableService), providerClient).getSuperheroes()
-    }
-
-}
 
 class SuperheroTableManager(val tableService: TableService){
 
