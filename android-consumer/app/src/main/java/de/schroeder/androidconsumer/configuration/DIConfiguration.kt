@@ -4,7 +4,8 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
+import de.schroeder.androidconsumer.MainActivity
 import de.schroeder.androidconsumer.RetrofitSuperheroClient
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class RetrofitModule {
 
     @Provides

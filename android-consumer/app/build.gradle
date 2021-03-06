@@ -10,7 +10,7 @@ ext {
     junit5Version = "5.7.1"
     pactVersion = "4.1.17"
     ktorVersion = "1.2.2"
-    hilt_version = "2.28-alpha"
+    hilt_version = "2.33-beta"
 }
 apply plugin: 'dagger.hilt.android.plugin'
 
