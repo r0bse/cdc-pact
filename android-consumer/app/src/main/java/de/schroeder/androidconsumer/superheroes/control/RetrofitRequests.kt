@@ -1,7 +1,5 @@
 package de.schroeder.androidconsumer
 
-import dagger.Component
-import de.schroeder.androidconsumer.configuration.RetrofitModule
 import de.schroeder.androidconsumer.superheroes.control.SuperheroTableManager
 import de.schroeder.androidconsumer.superheroes.enitity.SuperheroResource
 import retrofit2.Call
@@ -9,7 +7,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import javax.inject.Inject
 
 class RetrofitRequests (val superheroTableManager: SuperheroTableManager,
                         val retrofitSuperheroClient: RetrofitSuperheroClient) : Callback<List<SuperheroResource>> {
