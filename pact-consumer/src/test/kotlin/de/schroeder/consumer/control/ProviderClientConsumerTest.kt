@@ -41,7 +41,7 @@ const val CREATE_ONE = "a superhero, to be created, does not exist"
 @SpringBootTest(classes = [ConsumerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ProviderClientConsumerTest {
 
-    @Value("\${provider-service.url}")
+    @Value("\${superhero-provider-service.url}")
     lateinit var url: String
 
     @Autowired

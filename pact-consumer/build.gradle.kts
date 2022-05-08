@@ -52,8 +52,8 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    systemProperty "pact.provider.version", System.getProperty("pact.provider.version")?: project.version
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag"))?: "wip" // how should a verified providertest be tagged?
+    systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
+    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag"))?: "feature II" // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 }
 
@@ -63,7 +63,7 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = "wip" //how should the consumerTests (of this service) be tagged
+        //tags = ["wip"]//how should the consumerTests (of this service) be tagged
     }
     broker{
         pactBrokerUrl = "http://localhost:8090"

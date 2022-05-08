@@ -2,7 +2,7 @@ spring:
   main:
     banner-mode: "off"
   application:
-    name: pact-consumer
+    name: superhero-consumer-service
   profiles:
     active: local
   jackson:
@@ -24,7 +24,7 @@ management:
       show-details: when_authorized
       enabled: true
 
-provider-service:
+superhero-provider-service:
   url: "localhost"
   port: 8081
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
-@FeignClient(value = "provider-service", url="\${provider-service.url}:\${provider-service.port}", configuration = [ProviderClientConfiguration::class])
+@FeignClient(value = "superhero-provider-service", url="\${superhero-provider-service.url}:\${superhero-provider-service.port}", configuration = [ProviderClientConfiguration::class])
 interface ProviderClient {
 
     @GetMapping(path = ["/superheroes"], consumes = [MediaType.APPLICATION_JSON_VALUE])

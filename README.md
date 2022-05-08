@@ -33,24 +33,24 @@ Needs Provider-Service for full functionality.
 More description in subfolder.
 
 # How do I start?
-* start the docker-compose file
-* change the API or an API-Call
-  * either the requestclient by manipulating the requested Object or the URL
-  * or by changing the API within the provider (RequestObject, Headers, URL, etc.)
-* run `./gradlew test` in provider-service
-  * should fail with complaining about not missing the API contract
-* run `./gradlew test pactPublish` in a consumer-service
-  * should upload the changed pact
-  * a build/test of the provider should fail
-  
-# TODOs
-* ThymeLeaf for Kotlin-Consumer
-* Python-Consumer Example
-* Javascript-Consumer Example
-* PHP-Consumer Example
 
-* Better Doc what this example is about
-  * with sequence diagrams
-  * (maybe) gitTags to checkout a specific step within the workflow
-  * and stepByStep-buildImages
-  * Presentation/Gif/Video to illustatrate
+## Using the Example
+* start the docker-compose file with `docker-compose up`
+* create a database named `superheroes` on the started postgres container
+* start the superhero-provider-service with an IDE of your choice
+* start the Android-App or the Consumer-Service with an IDE of your Choice
+
+
+## change the API 
+* change the API or an API-Call within one of the consumers
+    * either the requestclient by manipulating the requested Object or the URL
+    * or by changing the API within the provider (RequestObject, Headers, URL, etc.)
+    * basically change anything (payload or request)
+    * run the tests by running the gradle test goal
+    * run `./gradlew test pactPublish`
+    * this will upload the changed pact
+* run `./gradlew test` in provider-service
+  * will fail and complain about not passing the verification of a pact
+    
+# TODOs
+* Too much too write about

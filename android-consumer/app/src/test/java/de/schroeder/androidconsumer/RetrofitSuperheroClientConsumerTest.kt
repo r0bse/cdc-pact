@@ -9,11 +9,13 @@ import au.com.dius.pact.core.model.RequestResponsePact
 import au.com.dius.pact.core.model.annotations.Pact
 import com.google.common.collect.ImmutableMap
 import com.google.gson.GsonBuilder
-import de.schroeder.androidconsumer.RetrofitSuperheroClient
+import de.schroeder.androidconsumer.superheroes.control.SuperheroClient
 import io.mockk.MockKAnnotations
 import io.pactfoundation.consumer.dsl.LambdaDsl
 import io.pactfoundation.consumer.dsl.LambdaDslJsonArray
 import io.pactfoundation.consumer.dsl.LambdaDslJsonBody
+import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -33,7 +35,7 @@ const val GET_ONE = "a requested superhero exists"
 @ExtendWith(PactConsumerTestExt::class)
 class RetrofitSuperheroClientConsumerTest {
 
-    lateinit var requestClient: RetrofitSuperheroClient
+    lateinit var requestClient: SuperheroClient
 
     @BeforeEach
     fun setup(mockServer: MockServer){
@@ -48,7 +50,7 @@ class RetrofitSuperheroClientConsumerTest {
                         .create()
                 )
             )
-            .build().create(RetrofitSuperheroClient::class.java)
+            .build().create(SuperheroClient::class.java)
     }
 
     @Pact(
@@ -86,7 +88,12 @@ class RetrofitSuperheroClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getOneSuperheroPact")
     fun `getting one superhero by id should succeed`(mockServer: MockServer) {
-        requestClient.getSuperhero(42).execute() //execute synchronously to receive result within test
+        val result = runBlocking {
+            requestClient.getSuperhero(42)
+        }
+        assertThat(result.name).isEqualTo("Bruce Wayne")
+        assertThat(result.secretIdentity).isEqualTo("Batman")
+        assertThat(result.affiliation).isEqualTo("DC")
     }
 
     @Pact(
@@ -116,6 +123,12 @@ class RetrofitSuperheroClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "getAllSuperheroesPact")
     fun `getting all superheroes should succeed`(mockServer: MockServer) {
-        requestClient.getSuperheroes().execute() //execute synchronously to receive result within test
+        val result = runBlocking {
+            requestClient.getSuperheroes()
+        }
+        assertThat(result).isNotEmpty
+        assertThat(result[0].name).isEqualTo("Peter Parker")
+        assertThat(result[0].secretIdentity).isEqualTo("Spider-Man")
+        assertThat(result[0].affiliation).isEqualTo("Marvel")
     }
 }

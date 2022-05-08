@@ -1,27 +1,36 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id "kotlin-kapt"
     id "idea"
     id "au.com.dius.pact" version "4.1.17"
 }
 
 ext {
     junit5Version = "5.7.1"
+    chucker_version = '3.5.2'
+    compose_version = '1.1.1'
+    koin_version = '3.1.6'
+    okhttp_version = '3.14.9'
     pactVersion = "4.1.17"
-    ktorVersion = "1.2.2"
-    hilt_version = "2.33-beta"
 }
-apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
+
+    buildFeatures {
+        compose true
+        viewBinding true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "$compose_version"
+    }
 
     defaultConfig {
         applicationId "de.schroeder.androidconsumer"
         minSdkVersion 30
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -54,43 +63,50 @@ android {
 
 dependencies {
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // Integration with observables
+    implementation 'androidx.compose.runtime:runtime-livedata:1.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-compose:$koin_version"
+    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.android.volley:volley:1.1.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
-
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.github.chuckerteam.chucker:library:$chucker_version"
     //requests with retrofit dependencies
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    testImplementation "org.assertj:assertj-core:3.22.0"
 
-    //requests with ktor dependencies
-    implementation "io.ktor:ktor-client-android:$ktorVersion"
-    implementation "io.ktor:ktor-client-cio:$ktorVersion"
-    implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
-
-    testImplementation('io.mockk:mockk:1.10.6')
+    testImplementation('io.mockk:mockk:1.12.2')
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     testImplementation("au.com.dius.pact.consumer:junit5:${pactVersion}")
     testImplementation("au.com.dius.pact.consumer:java8:${pactVersion}")
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
 
 pact {
     publish {
         version = '1.0.0'
-//        tags = listOf()?: emptyList() //how should the consumerTests (of this service) be tagged
+        tags = ["draft-feature-I"] //how should the consumerTests (of this service) be tagged
     }
     broker{
         pactBrokerUrl = "http://localhost:8090"
