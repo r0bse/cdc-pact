@@ -29,10 +29,6 @@ fun SuperheroView(viewModel: SuperheroViewModel) {
 
     val uiState = viewModel.uiState
 
-    LaunchedEffect(Unit) {
-        viewModel.getSuperheroes()
-    }
-
     Surface(
         shape = RoundedCornerShape(4.dp),
         elevation = 2.dp
@@ -53,7 +49,7 @@ fun SuperheroView(viewModel: SuperheroViewModel) {
                 )
             ) {
                 Text(
-                    text = "reload",
+                    text = "load data",
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Normal,
                     fontSize = 16.sp
