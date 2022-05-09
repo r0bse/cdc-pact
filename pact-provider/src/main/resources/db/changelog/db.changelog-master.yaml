@@ -3,3 +3,7 @@ databaseChangeLog:
       file: logs/db.changelog-1_initialsetup.sql
       relativeToChangelogFile: true
       stripComments: true
+  - include:
+      file: logs/db.changelog-2_add_age.sql
+      relativeToChangelogFile: true
+      stripComments: true

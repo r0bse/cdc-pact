@@ -1,10 +1,8 @@
 package de.schroeder.provider.boundary
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import de.schroeder.provider.control.SuperheroService
-import de.schroeder.provider.control.toResource
 import de.schroeder.provider.entity.SuperheroResource
-import org.springframework.http.HttpStatus
+import de.schroeder.provider.entity.SuperheroResponse
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,21 +13,21 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 class SuperheroController(val superheroService: SuperheroService){
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getAll() : ResponseEntity<List<SuperheroResource>>{
+    fun getAll() : ResponseEntity<List<SuperheroResponse>>{
         val heroes = superheroService.findAll()
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
             .body(heroes)
     }
 
     @GetMapping("/{id}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getOne(@PathVariable id: Long): ResponseEntity<SuperheroResource>{
+    fun getOne(@PathVariable id: Long): ResponseEntity<SuperheroResponse>{
         val hero = superheroService.findOne(id)
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
             .body(hero)
     }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun create(@RequestBody createRequest: SuperheroResource): ResponseEntity<SuperheroResource>{
+    fun create(@RequestBody createRequest: SuperheroResource): ResponseEntity<SuperheroResponse>{
         val hero = superheroService.create(createRequest)
         val uri = MvcUriComponentsBuilder.fromController(javaClass)
             .path("/superheroes/{id}")

@@ -22,6 +22,7 @@ import de.schroeder.provider.control.SuperheroRepository
 import de.schroeder.provider.entity.Superhero
 import io.mockk.every
 import org.springframework.http.ResponseEntity
+import java.time.ZonedDateTime
 import java.util.*
 
 @Provider("superhero-provider-service")
@@ -41,17 +42,17 @@ class SuperheroControllerProviderTest{
     @BeforeEach
     fun before(context: PactVerificationContext) {
         context.target = MockMvcTestTarget(mockMvc)
-        every{ superheroRepository.save(any())} returns Superhero("foo", "bar", "qux")
+        every{ superheroRepository.save(any())} returns Superhero("foo", "bar", "qux", ZonedDateTime.now().minusYears(42))
     }
 
     @State(GET_ONE)
     fun `get one should succeed`() {
-        every{ superheroRepository.findById(any())} returns Optional.of(Superhero("foo", "bar", "foobar"))
+        every{ superheroRepository.findById(any())} returns Optional.of(Superhero("foo", "bar", "foobar", ZonedDateTime.now().minusYears(42)))
     }
 
     @State(GET_ALL)
     fun `get all should succeed`() {
-        every{ superheroRepository.findAll()} returns listOf(Superhero("foo", "bar", "foobar"))
+        every{ superheroRepository.findAll()} returns listOf(Superhero("foo", "bar", "foobar", ZonedDateTime.now().minusYears(42)))
     }
 
     @State(CREATE_ONE)

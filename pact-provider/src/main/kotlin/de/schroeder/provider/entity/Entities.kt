@@ -16,7 +16,8 @@ import javax.validation.constraints.NotNull
 @Table(name = "superhero")
 class Superhero(@Column(nullable = false) @NotEmpty var name: String,
                 @Column(nullable = false) @NotEmpty var identity: String,
-                @Column(nullable = false) @NotEmpty var affiliation: String) {
+                @Column(nullable = false) @NotEmpty var affiliation: String,
+                @Column(nullable = false) @NotEmpty var birthday: ZonedDateTime) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
