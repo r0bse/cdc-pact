@@ -19,14 +19,14 @@ plugins {
     kotlin("plugin.spring") version "1.4.31"
     kotlin("plugin.allopen") version "1.4.31"
     kotlin("plugin.jpa") version "1.4.31"
-    id("au.com.dius.pact") version "4.1.6"
+    id("au.com.dius.pact") version "4.1.35"
 }
 
 group = "de.schroeder"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-extra["pactVersion"] = "4.1.17"
+extra["pactVersion"] = "4.1.35"
 extra["kotlinVersion"] = "1.4.31"
 extra["postgresVersion"] = "42.2.14"
 

@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.spring") version "1.4.30"
-    id ("au.com.dius.pact") version "4.1.17"
+    id ("au.com.dius.pact") version "4.1.35"
 }
 
 group = "de.schroeder"
@@ -17,7 +17,7 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2020.0.1"
-extra["pactVersion"] = "4.1.17"
+extra["pactVersion"] = "4.1.35"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -53,7 +53,7 @@ tasks.withType<Test> {
     systemProperty("pact.verifier.publishResults", true)
 
     systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag"))?: "feature II" // how should a verified providertest be tagged?
+    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag")) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 }
 
@@ -63,7 +63,7 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        //tags = ["wip"]//how should the consumerTests (of this service) be tagged
+        tags = listOf("draft-feature-II") //how should the consumerTests (of this service) be tagged, should be set in pipeline
     }
     broker{
         pactBrokerUrl = "http://localhost:8090"

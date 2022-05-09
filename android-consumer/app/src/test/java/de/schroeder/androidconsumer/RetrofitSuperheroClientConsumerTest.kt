@@ -1,4 +1,4 @@
-package de.schroeder.consumer.control
+package de.schroeder.androidconsumer
 
 import au.com.dius.pact.consumer.MockServer
 import au.com.dius.pact.consumer.dsl.DslPart
@@ -64,14 +64,14 @@ class RetrofitSuperheroClientConsumerTest {
             payload.stringMatcher("name", ".*", "Bruce Wayne")
             payload.stringMatcher("secretIdentity", ".*", "Batman")
             payload.stringMatcher("affiliation", ".*", "DC")
-            payload.numberType("age", 41)
-            payload.stringMatcher("adress", ".*", "ask Superman")
-            payload.eachArrayLike("hobbies", 2){
-                    arrayEntry ->
-                    arrayEntry.stringType("Hunting bad guys")
-                    arrayEntry.stringType("Hanging out with Superman")
-
-            }
+//            payload.numberType("age", 41)
+//            payload.stringMatcher("adress", ".*", "ask Superman")
+//            payload.eachArrayLike("hobbies", 2){
+//                    arrayEntry ->
+//                    arrayEntry.stringType("Hunting bad guys")
+//                    arrayEntry.stringType("Hanging out with Superman")
+//
+//            }
         }.build()
 
         return builder.given(GET_ONE)
@@ -94,6 +94,7 @@ class RetrofitSuperheroClientConsumerTest {
         assertThat(result.name).isEqualTo("Bruce Wayne")
         assertThat(result.secretIdentity).isEqualTo("Batman")
         assertThat(result.affiliation).isEqualTo("DC")
+//        assertThat(result.age).isEqualTo(41)
     }
 
     @Pact(
@@ -106,6 +107,7 @@ class RetrofitSuperheroClientConsumerTest {
                     entry.stringMatcher("name", ".*", "Peter Parker")
                     entry.stringMatcher("secretIdentity", ".*", "Spider-Man")
                     entry.stringMatcher("affiliation", ".*", "Marvel")
+//                    entry.numberType("age", 25)
                 }
         }.build()
 
@@ -130,5 +132,6 @@ class RetrofitSuperheroClientConsumerTest {
         assertThat(result[0].name).isEqualTo("Peter Parker")
         assertThat(result[0].secretIdentity).isEqualTo("Spider-Man")
         assertThat(result[0].affiliation).isEqualTo("Marvel")
+//        assertThat(result[0].age).isEqualTo(25)
     }
 }

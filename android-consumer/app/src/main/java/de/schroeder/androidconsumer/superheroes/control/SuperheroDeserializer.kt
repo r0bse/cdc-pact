@@ -33,7 +33,8 @@ class SuperheroDeserializer : JsonDeserializer<SuperheroResource> {
         val name = heroJson.get("name").asString
         val secretIdentity = heroJson.get("secretIdentity").asString
         val affiliation = heroJson.get("affiliation").asString
+        val age = heroJson.get("age").asInt
 
-        return SuperheroResource(name, secretIdentity, affiliation)
+        return SuperheroResource(name, secretIdentity, affiliation, age)
     }
 }

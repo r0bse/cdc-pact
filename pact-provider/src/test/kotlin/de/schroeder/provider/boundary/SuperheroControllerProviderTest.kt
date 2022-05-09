@@ -24,11 +24,6 @@ import io.mockk.every
 import org.springframework.http.ResponseEntity
 import java.util.*
 
-const val GET_ALL = "at least one superhero exists"
-const val GET_ONE = "a requested superhero exists"
-
-const val CREATE_ONE = "a superhero, to be created, does not exist"
-
 @Provider("superhero-provider-service")
 @PactBroker(
     host = "localhost",
@@ -46,6 +41,7 @@ class SuperheroControllerProviderTest{
     @BeforeEach
     fun before(context: PactVerificationContext) {
         context.target = MockMvcTestTarget(mockMvc)
+        every{ superheroRepository.save(any())} returns Superhero("foo", "bar", "qux")
     }
 
     @State(GET_ONE)
@@ -66,5 +62,12 @@ class SuperheroControllerProviderTest{
     @ExtendWith(PactVerificationInvocationContextProvider::class)
     fun testTemplate(context: PactVerificationContext) {
         context.verifyInteraction()
+    }
+
+    companion object{
+        const val GET_ALL = "at least one superhero exists"
+        const val GET_ONE = "a requested superhero exists"
+
+        const val CREATE_ONE = "a superhero, to be created, does not exist"
     }
 }

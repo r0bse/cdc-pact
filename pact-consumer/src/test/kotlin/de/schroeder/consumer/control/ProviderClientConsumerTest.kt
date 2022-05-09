@@ -126,7 +126,7 @@ class ProviderClientConsumerTest {
             .headers(ImmutableMap.of("foo", "bar", HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
             .willRespondWith()
             .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-            .status(HttpStatus.OK.value())
+            .status(HttpStatus.CREATED.value())
             .toPact()
     }
 
