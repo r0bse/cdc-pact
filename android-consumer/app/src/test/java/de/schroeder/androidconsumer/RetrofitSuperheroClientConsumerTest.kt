@@ -22,8 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val CONSUMER = "android-consumer"
-const val PROVIDER = "pact-provider"
+const val CONSUMER = "superhero-android-consumer"
+const val PROVIDER = "superhero-provider-service"
 
 const val GET_ALL = "at least one superhero exists"
 const val GET_ONE = "a requested superhero exists"

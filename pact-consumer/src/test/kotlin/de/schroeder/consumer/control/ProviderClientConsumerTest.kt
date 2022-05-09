@@ -25,8 +25,8 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 
-const val CONSUMER = "pact-consumer"
-const val PROVIDER = "pact-provider"
+const val CONSUMER = "superhero-consumer-service"
+const val PROVIDER = "superhero-provider-service"
 
 const val GET_ALL = "at least one superhero exists"
 const val GET_ONE = "a requested superhero exists"
@@ -41,9 +41,6 @@ const val CREATE_ONE = "a superhero, to be created, does not exist"
 @SpringBootTest(classes = [ConsumerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ProviderClientConsumerTest {
 
-    @Value("\${superhero-provider-service.url}")
-    lateinit var url: String
-
     @Autowired
     lateinit var providerCLient: ProviderClient
 
@@ -55,7 +52,7 @@ class ProviderClientConsumerTest {
         val responsePayload: DslPart = LambdaDsl.newJsonBody {
                 payload: LambdaDslJsonBody ->
             payload.stringMatcher("name", ".*", "Bruce Wayne")
-            payload.stringMatcher("identity", ".*", "Batman")
+            payload.stringMatcher("secretIdentity", ".*", "Batman")
             payload.stringMatcher("affiliation", ".*", "DC")
         }.build()
 
@@ -86,7 +83,7 @@ class ProviderClientConsumerTest {
                 payload: LambdaDslJsonArray ->
                 payload.`object` { entry ->
                     entry.stringMatcher("name",".*","Peter Parker")
-                    entry.stringMatcher("identity", ".*", "Spider-Man")
+                    entry.stringMatcher("secretIdentity", ".*", "Spider-Man")
                     entry.stringMatcher("affiliation",".*", "Marvel")
                 }
         }.build()
@@ -117,7 +114,7 @@ class ProviderClientConsumerTest {
         val requestPayload: DslPart = LambdaDsl.newJsonBody {
                 payload: LambdaDslJsonBody ->
             payload.stringMatcher("name", ".*", "Peter Porker")
-            payload.stringMatcher("identity", ".*", "Spider-Ham")
+            payload.stringMatcher("secretIdentity", ".*", "Spider-Ham")
             payload.stringMatcher("affiliation", ".*", "Marvel")
         }.build()
 

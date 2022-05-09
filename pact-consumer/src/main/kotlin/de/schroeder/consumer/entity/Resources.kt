@@ -1,5 +1,8 @@
 package de.schroeder.consumer.entity
 
-data class GetResource(val name: String,
-                       val affiliation: String,
-                       val identity: String)
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class SuperheroResource(val name: String,
+                             val affiliation: String,
+                             @JsonProperty("secretIdentity")
+                             val identity: String)

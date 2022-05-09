@@ -29,7 +29,7 @@ const val GET_ONE = "a requested superhero exists"
 
 const val CREATE_ONE = "a superhero, to be created, does not exist"
 
-@Provider("pact-provider")
+@Provider("superhero-provider-service")
 @PactBroker(
     host = "localhost",
     port = "8090"

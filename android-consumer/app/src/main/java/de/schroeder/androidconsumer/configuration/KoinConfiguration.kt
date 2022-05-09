@@ -22,6 +22,10 @@ import java.lang.reflect.Type
 
 
 object RetrofitModule {
+
+    private const val PROVIDER_SERVICE_IP = "192.168.178.30"
+    private const val PROVIDER_SERVICE_PORT = 8081
+
     fun invoke(): Module {
         return module {
             single{ SuperheroRepository(get()) }
@@ -31,7 +35,7 @@ object RetrofitModule {
     }
 
     private fun retrofitBuilder(context: Context): Retrofit{
-        val superHeroesListType: Type = object : TypeToken<List<SuperheroResource?>?>() {}.getType()
+        val superHeroesListType: Type = object : TypeToken<List<SuperheroResource?>?>() {}.type
         return Retrofit.Builder()
             .client(
                 OkHttpClient.Builder()
@@ -40,7 +44,7 @@ object RetrofitModule {
                         ChuckerInterceptor.Builder(context).build()
                     ).build()
             ) // adds possibility to view requests on device
-            .baseUrl("http://192.168.178.30:8080") // points to a locally running backend service
+            .baseUrl("http://$PROVIDER_SERVICE_IP:$PROVIDER_SERVICE_PORT") // points to a locally running backend service
             .addConverterFactory(
                 GsonConverterFactory.create(
                     GsonBuilder()
