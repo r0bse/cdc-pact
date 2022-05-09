@@ -12,9 +12,9 @@ fun Superhero.toResource() : SuperheroResource{
 
 fun SuperheroResource.toEntity() : Superhero{
 
-    val hero = Superhero( name = this.name,
-                                affiliation = this.affiliation,
-                                identity = this.secretIdentity)
+    val hero = Superhero(name = this.name,
+                         affiliation = this.affiliation,
+                         identity = this.secretIdentity)
 
     return hero
 }

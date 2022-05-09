@@ -2,9 +2,10 @@
 
 -- changeset mail.me@trash-mail.com:2021-03-03_20.00
 --
+-- create sequence public.hibernate_sequence;
 CREATE TABLE superhero
 (
-    id BIGINT not null,
+    id SERIAL,
     version INT not null,
     created_at timestamp not null,
     last_modified timestamp not null,
@@ -13,9 +14,9 @@ CREATE TABLE superhero
     affiliation varchar NOT NULL,
     PRIMARY KEY (id)
 );
-insert into superhero(id, version, created_at, last_modified, name, identity, affiliation) values
-(1, 0, now(), now(), 'Batman', 'Bruce Wayne', 'DC'),
-(2, 0, now(), now(), 'Spider-Man', 'Peter Parker', 'Marvel'),
-(3, 0, now(), now(), 'Spider-Gwen', 'Gwen Stacy', 'Marvel'),
-(4, 0, now(), now(), 'Spider-Ham', 'Peter Porker', 'Marvel'),
-(5, 0, now(), now(), 'Superman', 'Clark Kent', 'DC');
+insert into superhero(version, created_at, last_modified, name, identity, affiliation) values
+(0, now(), now(), 'Batman', 'Bruce Wayne', 'DC'),
+(0, now(), now(), 'Spider-Man', 'Peter Parker', 'Marvel'),
+(0, now(), now(), 'Spider-Gwen', 'Gwen Stacy', 'Marvel'),
+(0, now(), now(), 'Spider-Ham', 'Peter Porker', 'Marvel'),
+(0, now(), now(), 'Superman', 'Clark Kent', 'DC');
