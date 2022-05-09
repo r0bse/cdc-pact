@@ -23,6 +23,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 const val CONSUMER = "superhero-consumer-service"
@@ -116,6 +118,7 @@ class ProviderClientConsumerTest {
             payload.stringMatcher("name", ".*", "Peter Porker")
             payload.stringMatcher("secretIdentity", ".*", "Spider-Ham")
             payload.stringMatcher("affiliation", ".*", "Marvel")
+            payload.time("birthday", "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
         }.build()
 
         return builder.given(CREATE_ONE)
@@ -133,6 +136,6 @@ class ProviderClientConsumerTest {
     @Test
     @PactTestFor(pactMethod = "createSuperheroPact")
     fun `creating a superhero should succeed`(mockServer: MockServer) {
-        providerCLient.create(CreateRequest("Peter Porker", "Marvel", "Spider-Ham"))
+        providerCLient.create(CreateRequest("Peter Porker", "Marvel", "Spider-Ham", ZonedDateTime.now(ZoneId.of("UTC"))))
     }
 }
