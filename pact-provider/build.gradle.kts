@@ -6,19 +6,19 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.4.31")
-        classpath("org.jetbrains.kotlin:kotlin-noarg:1.4.31")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.6.21")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:1.6.21")
     }
 }
 
 plugins {
     id("org.springframework.boot") version "2.4.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.spring") version "1.4.31"
-    kotlin("plugin.allopen") version "1.4.31"
-    kotlin("plugin.jpa") version "1.4.31"
+    kotlin("jvm") version "1.6.21"
+    kotlin("plugin.spring") version "1.6.21"
+    kotlin("plugin.allopen") version "1.6.21"
+    kotlin("plugin.jpa") version "1.6.21"
     id("au.com.dius.pact") version "4.1.35"
 }
 
@@ -27,7 +27,7 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 extra["pactVersion"] = "4.1.35"
-extra["kotlinVersion"] = "1.4.31"
+extra["kotlinVersion"] = "1.6.21"
 extra["postgresVersion"] = "42.2.14"
 
 repositories {
@@ -67,7 +67,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    systemProperty("pactbroker.host", "localhost:8090")
+    systemProperty("pactbroker.host", "http://localhost:8090")
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 

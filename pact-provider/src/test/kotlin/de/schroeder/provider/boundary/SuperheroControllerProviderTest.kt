@@ -20,6 +20,7 @@ import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget
 import com.ninjasquad.springmockk.MockkBean
 import de.schroeder.provider.control.SuperheroRepository
 import de.schroeder.provider.entity.Superhero
+import de.schroeder.provider.testutil.PostgresTestContainerTest
 import io.mockk.every
 import org.springframework.http.ResponseEntity
 import java.time.ZonedDateTime
@@ -32,6 +33,7 @@ import java.util.*
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@PostgresTestContainerTest
 class SuperheroControllerProviderTest{
 
     @Autowired
