@@ -66,7 +66,7 @@ pact {
         tags = listOf("draft-feature-II") //how should the consumerTests (of this service) be tagged, should be set in pipeline
     }
     broker{
-        pactBrokerUrl = "http://localhost:8090"
+        pactBrokerUrl = "http://192.168.178.30:8090"
         retryCountWhileUnknown=0
         retryWhileUnknownInterval=0
     }
