@@ -74,14 +74,14 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    val pactTag = System.getProperty("pact.provider.tag")?: "dev"
+    val pactTag = System.getProperty("pact.provider.branch")?:  gitBranch()
     val projectVersion = System.getProperty("pact.provider.version")?: project.version
     systemProperty("pact.provider.version", "$projectVersion")
-//    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 
-    systemProperty("pact.provider.branch", gitBranch())
-    systemProperty("pactbroker.enablePending", true)
+    systemProperty("pact.provider.branch", pactTag) // ist der branch der gerade den Pact verifiziert
+    systemProperty("pactbroker.providerTags", "master") // ist der branch des Providers, der einen pending Pact als verifiziert melden darf
+    systemProperty("pactbroker.enablePending", true) // schaltet das Pending Feature frei
 }
 
 /**
