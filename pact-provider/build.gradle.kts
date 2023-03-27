@@ -70,7 +70,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    systemProperty("pactbroker.host", "http://localhost:8090")
+    systemProperty("pactbroker.host", "localhost:9292")
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
