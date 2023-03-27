@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "de.schroeder"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.3"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -64,7 +64,7 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = listOf("dev") //how should the ConsumerPacts (of this service) be tagged
+        tags = listOf("prod") //how should the ConsumerPacts (of this service) be tagged
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"

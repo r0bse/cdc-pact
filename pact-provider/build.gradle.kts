@@ -23,7 +23,7 @@ plugins {
 }
 
 group = "de.schroeder"
-version = "0.0.2-SNAPSHOT"
+version = "0.0.2"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -74,7 +74,7 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    val pactTag = System.getProperty("pact.provider.tag")?: "dev"
+    val pactTag = System.getProperty("pact.provider.tag")?: "prod"
     val projectVersion = System.getProperty("pact.provider.version")?: project.version
     systemProperty("pact.provider.version", "$projectVersion")
     systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
