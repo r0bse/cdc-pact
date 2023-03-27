@@ -4,6 +4,8 @@ import au.com.dius.pact.consumer.MockServer
 import au.com.dius.pact.consumer.dsl.*
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt
 import au.com.dius.pact.consumer.junit5.PactTestFor
+import au.com.dius.pact.consumer.junit5.ProviderType
+import au.com.dius.pact.core.model.PactSpecVersion
 import au.com.dius.pact.core.model.RequestResponsePact
 import au.com.dius.pact.core.model.annotations.Pact
 import de.schroeder.consumer.ConsumerApplication
@@ -30,7 +32,8 @@ const val CREATE_ONE = "a superhero, to be created, does not exist"
 
 @PactTestFor(
     providerName = PROVIDER,
-    port = "8081" // to use a random port delete this entry (or replace with "0", and rebuild the FeignClient with the mockServer port
+    port = "8081", // to use a random port delete this entry (or replace with "0", and rebuild the FeignClient with the mockServer port
+    pactVersion = PactSpecVersion.V3
 )
 @ExtendWith(PactConsumerTestExt::class, SpringExtension::class)
 @SpringBootTest(classes = [ConsumerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -117,6 +120,7 @@ class ProviderClientConsumerTest {
             .uponReceiving("a request to create a superhero")
             .path("/superheroes")
             .method(Request.HttpMethod.POST.name)
+            .headers(mapOf(HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE))
             .body(requestPayload)
             .headers(mapOf("foo" to "bar"))
             .willRespondWith()
