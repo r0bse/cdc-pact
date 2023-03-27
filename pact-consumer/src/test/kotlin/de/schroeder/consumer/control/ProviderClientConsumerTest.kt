@@ -1,19 +1,14 @@
 package de.schroeder.consumer.control
 
 import au.com.dius.pact.consumer.MockServer
-import au.com.dius.pact.consumer.dsl.DslPart
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider
+import au.com.dius.pact.consumer.dsl.*
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt
 import au.com.dius.pact.consumer.junit5.PactTestFor
 import au.com.dius.pact.core.model.RequestResponsePact
 import au.com.dius.pact.core.model.annotations.Pact
-import com.google.common.collect.ImmutableMap
 import de.schroeder.consumer.ConsumerApplication
 import de.schroeder.consumer.entity.CreateRequest
 import feign.Request
-import io.pactfoundation.consumer.dsl.LambdaDsl
-import io.pactfoundation.consumer.dsl.LambdaDslJsonArray
-import io.pactfoundation.consumer.dsl.LambdaDslJsonBody
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,9 +55,9 @@ class ProviderClientConsumerTest {
             .uponReceiving("a request to get a superhero by id")
             .path("/superheroes/42")
             .method(Request.HttpMethod.GET.name)
-            .headers(ImmutableMap.of("foo", "bar"))
+            .headers(mapOf("foo" to "bar"))
             .willRespondWith()
-            .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+            .headers(mapOf(HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE))
             .body(responsePayload)
             .status(HttpStatus.OK.value())
             .toPact()
@@ -92,9 +87,9 @@ class ProviderClientConsumerTest {
             .uponReceiving("a request to get all superheroes")
             .path("/superheroes")
             .method(Request.HttpMethod.GET.name)
-            .headers(ImmutableMap.of("foo", "bar"))
+            .headers(mapOf("foo" to "bar"))
             .willRespondWith()
-            .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+            .headers(mapOf(HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE))
             .body(responsePayload)
             .status(HttpStatus.OK.value())
             .toPact()
@@ -123,9 +118,9 @@ class ProviderClientConsumerTest {
             .path("/superheroes")
             .method(Request.HttpMethod.POST.name)
             .body(requestPayload)
-            .headers(ImmutableMap.of("foo", "bar", HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+            .headers(mapOf("foo" to "bar"))
             .willRespondWith()
-            .headers(ImmutableMap.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+            .headers(mapOf(HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE))
             .status(HttpStatus.CREATED.value())
             .toPact()
     }

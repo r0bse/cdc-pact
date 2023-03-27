@@ -1,25 +1,30 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
+
+    System.setProperty("kotlinVersion", "1.8.10")
+    System.setProperty("pactVersion", "4.5.4")
+    System.setProperty("postgresVersion", "42.2.14")
+
     repositories {
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.10")
-        classpath("org.jetbrains.kotlin:kotlin-noarg:1.8.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${System.getProperty("kotlinVersion")}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${System.getProperty("kotlinVersion")}")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:${System.getProperty("kotlinVersion")}")
     }
 }
 
 plugins {
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
-    kotlin("plugin.allopen") version "1.8.10"
-    kotlin("plugin.jpa") version "1.8.10"
-    id("au.com.dius.pact") version "4.1.19"
+    kotlin("jvm") version System.getProperty("kotlinVersion")
+    kotlin("plugin.spring") version System.getProperty("kotlinVersion")
+    kotlin("plugin.allopen") version System.getProperty("kotlinVersion")
+    kotlin("plugin.jpa") version System.getProperty("kotlinVersion")
+    id("au.com.dius.pact") version System.getProperty("pactVersion")
 }
 
 group = "de.schroeder"
@@ -29,10 +34,6 @@ java.targetCompatibility = JavaVersion.VERSION_17
 
 
 
-extra["pactVersion"] = "4.1.19"
-extra["kotlinVersion"] = "1.8.10"
-extra["postgresVersion"] = "42.2.14"
-
 repositories {
     mavenCentral()
 }
@@ -40,23 +41,21 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging:2.0.4")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.liquibase:liquibase-core")
-    implementation("org.jetbrains.kotlin:kotlin-noarg:${property("kotlinVersion")}")
-    runtimeOnly("org.postgresql:postgresql:${property("postgresVersion")}")
+    implementation("org.jetbrains.kotlin:kotlin-noarg:${System.getProperty("kotlinVersion")}")
+    runtimeOnly("org.postgresql:postgresql:${System.getProperty("postgresVersion")}")
 
 
     testImplementation("io.mockk:mockk:1.10.6")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
     testImplementation("org.testcontainers:testcontainers:1.15.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("au.com.dius.pact.provider:spring:${property("pactVersion")}")
-    testImplementation("au.com.dius.pact.provider:junit5:${property("pactVersion")}")
-    testImplementation("au.com.dius.pact.provider:junit5spring:${property("pactVersion")}")
+    testImplementation("au.com.dius.pact.provider:spring:${System.getProperty("pactVersion")}")
+    testImplementation("au.com.dius.pact.provider:junit5:${System.getProperty("pactVersion")}")
+    testImplementation("au.com.dius.pact.provider:junit5spring:${System.getProperty("pactVersion")}")
     testImplementation ("org.awaitility:awaitility:4.0.3")
     testImplementation("org.testcontainers:postgresql:1.15.2")
 }
