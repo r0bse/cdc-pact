@@ -1,8 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val pactVersion: String by project
-val kotlinVersion: String by project
-
 plugins {
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
@@ -57,7 +54,7 @@ tasks.withType<Test> {
     systemProperty("pact.verifier.publishResults", true)
 
     systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag"))?: "wip" // how should a verified providertest be tagged?
+    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag")) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 }
 
@@ -67,7 +64,7 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = listOf("wip") //how should the ConsumerPacts (of this service) be tagged
+        tags = listOf("dev") //how should the ConsumerPacts (of this service) be tagged
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"

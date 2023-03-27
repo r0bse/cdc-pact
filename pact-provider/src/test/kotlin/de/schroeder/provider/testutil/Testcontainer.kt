@@ -11,6 +11,7 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.utility.DockerImageName
 import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 
@@ -33,9 +34,9 @@ class PostgresTestContainerRunner : ApplicationContextInitializer<ConfigurableAp
         logger.debug(String.format("Pulling Image with name: %s", dockerImageName))
         logger.debug(String.format("Creating database: %s:%s", dbName, dbPort))
 
-        val dbContainer: GenericContainer<Nothing> = start(dockerRegistry + dockerImageName, dbName, Integer.valueOf(dbPort))
+        val dbContainer = start(dockerRegistry + dockerImageName, dbName, Integer.valueOf(dbPort))
         val containerDbPort: Int = dbContainer.getMappedPort(Integer.valueOf(dbPort))
-        val containerIpAddress: String = dbContainer.getContainerIpAddress()
+        val containerIpAddress: String = dbContainer.containerIpAddress
         val values = TestPropertyValues.of(
             "postgresql.host=$containerIpAddress",
             "postgresql.port=$containerDbPort"
@@ -50,13 +51,11 @@ class PostgresTestContainerRunner : ApplicationContextInitializer<ConfigurableAp
          * [GenericContainer.start] should be run in a static method otherwise testcontainer will start and stop a
          * container for each test class
          */
-        private fun start(dockerImageName: String, dbName: String, dbPort: Int): GenericContainer<Nothing> {
-            container = PostgreSQLContainer<Nothing>(dockerImageName)
-            .apply {
-                withDatabaseName(dbName)
-                withUsername("postgres")
-                withPassword("password")
-            }
+        private fun start(dockerImageName: String, dbName: String, dbPort: Int): PostgreSQLContainer<*> {
+            val container = PostgreSQLContainer(DockerImageName.parse("postgres:13-alpine"))
+                .withDatabaseName(dbName)
+                .withUsername("postgres")
+                .withPassword("password")
             .withExposedPorts(dbPort)
             container.start()
             return container

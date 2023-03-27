@@ -1,10 +1,13 @@
+server:
+  port: 8081
+
 spring:
   main:
     banner-mode: "off"
 #  profiles:
 #    active: local
   application:
-    name: provider-service
+    name: superhero-provider-service
   jackson:
     serialization:
       write_dates_as_timestamps: false
@@ -42,7 +45,7 @@ postgresql:
   host: localhost
   port: 5432
   db:
-    name: provider-database
+    name: superheroes
   schema:
     name: public
   user:

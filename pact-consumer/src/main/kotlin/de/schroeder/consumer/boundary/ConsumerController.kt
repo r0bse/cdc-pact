@@ -2,7 +2,7 @@ package de.schroeder.consumer.boundary
 
 import de.schroeder.consumer.control.ProviderClient
 import de.schroeder.consumer.entity.CreateRequest
-import de.schroeder.consumer.entity.GetResource
+import de.schroeder.consumer.entity.SuperheroResource
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -14,13 +14,13 @@ class ConsumerController(val providerClient: ProviderClient){
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getAll() : ResponseEntity<List<GetResource>>{
+    fun getAll() : ResponseEntity<List<SuperheroResource>>{
         return providerClient.getAll()
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getOne(@PathVariable id: Long): ResponseEntity<GetResource>{
+    fun getOne(@PathVariable id: Long): ResponseEntity<SuperheroResource>{
         return providerClient.getOne(id)
     }
 

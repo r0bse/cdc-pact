@@ -70,12 +70,12 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    systemProperty("pactbroker.host", "localhost:8090")
+    systemProperty("pactbroker.host", "http://localhost:8090")
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    val pactTag = System.getProperty("pact.provider.tag")?: "wip"
-    val projectVersion = System.getProperty("ppact.provider.version")?: project.version
+    val pactTag = System.getProperty("pact.provider.tag")?: "dev"
+    val projectVersion = System.getProperty("pact.provider.version")?: project.version
     systemProperty("pact.provider.version", "$projectVersion")
     systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)

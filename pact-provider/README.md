@@ -4,8 +4,8 @@
 Example Project to showcase a consumer driven approach to API developement.
 
 # Start
-
-`./gradlew bootRun`
+Ensure that the database `superheroes`does exist, 
+then run: `./gradlew bootRun`
 
 # Build
 

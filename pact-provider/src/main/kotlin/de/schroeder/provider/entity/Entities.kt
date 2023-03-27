@@ -14,13 +14,13 @@ import javax.validation.constraints.NotNull
 
 @Entity
 @Table(name = "superhero")
-class Superhero(@Column(nullable = false) @NotEmpty var name: String?,
-                @Column(nullable = false) @NotEmpty var identity: String?,
-                @Column(nullable = false) @NotEmpty var affiliation: String?) {
+class Superhero(@Column(nullable = false) @NotEmpty var name: String,
+                @Column(nullable = false) @NotEmpty var identity: String,
+                @Column(nullable = false) @NotEmpty var affiliation: String) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    var id: Int? = null
 
     @Version
     @Column(nullable = false)
@@ -28,9 +28,10 @@ class Superhero(@Column(nullable = false) @NotEmpty var name: String?,
 
     @CreatedDate
     @Column(nullable = false)
-    lateinit var createdAt: ZonedDateTime
+    var createdAt: ZonedDateTime = ZonedDateTime.now()
 
     @LastModifiedDate
     @Column(nullable = false)
-    lateinit var lastModified: ZonedDateTime
+    var lastModified: ZonedDateTime = createdAt
+
 }

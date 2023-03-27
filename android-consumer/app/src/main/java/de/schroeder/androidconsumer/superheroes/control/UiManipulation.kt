@@ -10,9 +10,9 @@ import java.util.*
 
 class SuperheroTableManager(val tableService: TableService){
 
-    fun addSuperheroToTable(heroes: List<SuperheroResource>){
+    fun addSuperheroToTable(heroes: List<SuperheroResource>?){
         tableService.clearTable()
-        heroes.forEach{ superhero -> tableService.addHeroRow(superhero)}
+        heroes?.forEach{ superhero -> tableService.addHeroRow(superhero)}
     }
 }
 
