@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.ByteArrayOutputStream
 
 buildscript {
 
@@ -28,7 +29,7 @@ plugins {
 }
 
 group = "de.schroeder"
-version = "0.0.2-SNAPSHOT"
+version = "0.0.3-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -76,8 +77,11 @@ tasks.withType<Test> {
     val pactTag = System.getProperty("pact.provider.tag")?: "dev"
     val projectVersion = System.getProperty("pact.provider.version")?: project.version
     systemProperty("pact.provider.version", "$projectVersion")
-    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
+//    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
+
+    systemProperty("pact.provider.branch", gitBranch())
+    systemProperty("pactbroker.enablePending", true)
 }
 
 /**
@@ -87,4 +91,25 @@ allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.MappedSuperclass")
     annotation("javax.persistence.Embeddable")
+}
+
+/**
+ * Utility function to retrieve the name of the current git branch.
+ * Will not work if build tool detaches head after checkout, which some do!
+ */
+fun gitBranch(): String {
+    return try {
+        val byteOut = ByteArrayOutputStream()
+        project.exec {
+            commandLine = "git rev-parse --abbrev-ref HEAD".split(" ")
+            standardOutput = byteOut
+        }
+        String(byteOut.toByteArray()).trim().also {
+            if (it == "HEAD")
+                logger.warn("Unable to determine current branch: Project is checked out with detached head!")
+        }
+    } catch (e: Exception) {
+        logger.warn("Unable to determine current branch: ${e.message}")
+        "Unknown Branch"
+    }
 }

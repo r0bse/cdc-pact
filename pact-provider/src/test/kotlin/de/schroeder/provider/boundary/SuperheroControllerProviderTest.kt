@@ -28,7 +28,8 @@ import java.util.*
 @Provider("superhero-provider-service")
 @PactBroker(
     host = "localhost",
-    port = "9292"
+    port = "9292",
+//    enablePendingPacts = "true"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
