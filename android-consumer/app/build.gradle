@@ -77,6 +77,10 @@ dependencies {
     implementation "io.ktor:ktor-client-cio:$ktorVersion"
     implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
 
+    testImplementation "com.github.janphkre:laminat:3.5.13"
+    testImplementation "com.github.janphkre:laminat-extensions:3.5.13"
+    testImplementation "com.github.janphkre:laminat-retrofit:3.5.13"
+
     testImplementation('io.mockk:mockk:1.10.6')
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit5Version}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit5Version}"

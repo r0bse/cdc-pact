@@ -6,28 +6,31 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.4.31")
-        classpath("org.jetbrains.kotlin:kotlin-noarg:1.4.31")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.8.10")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:1.8.10")
     }
 }
 
 plugins {
-    id("org.springframework.boot") version "2.4.3"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.spring") version "1.4.31"
-    kotlin("plugin.allopen") version "1.4.31"
-    kotlin("plugin.jpa") version "1.4.31"
-    id("au.com.dius.pact") version "4.1.6"
+    id("org.springframework.boot") version "3.0.5"
+    id("io.spring.dependency-management") version "1.1.0"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.spring") version "1.8.10"
+    kotlin("plugin.allopen") version "1.8.10"
+    kotlin("plugin.jpa") version "1.8.10"
+    id("au.com.dius.pact") version "4.1.19"
 }
 
 group = "de.schroeder"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "0.0.2-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
-extra["pactVersion"] = "4.1.17"
-extra["kotlinVersion"] = "1.4.31"
+
+
+extra["pactVersion"] = "4.1.19"
+extra["kotlinVersion"] = "1.8.10"
 extra["postgresVersion"] = "42.2.14"
 
 repositories {
@@ -61,7 +64,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 

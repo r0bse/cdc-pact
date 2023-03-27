@@ -1,23 +1,27 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val pactVersion: String by project
+val kotlinVersion: String by project
+
 plugins {
-    id("org.springframework.boot") version "2.4.3"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.spring") version "1.4.30"
-    id ("au.com.dius.pact") version "4.1.17"
+    id("org.springframework.boot") version "3.0.5"
+    id("io.spring.dependency-management") version "1.1.0"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.spring") version "1.8.10"
+    id ("au.com.dius.pact") version "4.1.19"
 }
 
 group = "de.schroeder"
-version = "0.0.2-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "0.0.3-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2020.0.1"
-extra["pactVersion"] = "4.1.17"
+extra["springCloudVersion"] = "2022.0.1"
+extra["pactVersion"] = "4.1.19"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -43,7 +47,7 @@ dependencyManagement {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -52,7 +56,7 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true)
 
-    systemProperty "pact.provider.version", System.getProperty("pact.provider.version")?: project.version
+    systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
     systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag"))?: "wip" // how should a verified providertest be tagged?
     systemProperty("pact.showFullDiff", true)
 }
@@ -63,10 +67,10 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = "wip" //how should the consumerTests (of this service) be tagged
+        tags = listOf("wip") //how should the ConsumerPacts (of this service) be tagged
     }
     broker{
-        pactBrokerUrl = "http://localhost:8090"
+        pactBrokerUrl = "http://localhost:9292"
         retryCountWhileUnknown=0
         retryWhileUnknownInterval=0
     }
