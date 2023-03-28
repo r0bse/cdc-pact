@@ -3,5 +3,5 @@ package de.schroeder.provider.entity
 data class SuperheroResource(val name:String,
                              val affiliation: String,
                              val secretIdentity: String,
-                             val isPopular: Boolean = true
+//                             val isPopular: Boolean = true
 )

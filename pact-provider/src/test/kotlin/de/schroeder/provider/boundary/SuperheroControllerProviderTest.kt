@@ -67,13 +67,13 @@ class SuperheroControllerProviderTest{
     /**
      * Select the Pacts to verify based on how the Consumer tagged it`s Contracts in the PactBroker
      */
-    @PactBrokerConsumerVersionSelectors
-    fun consumerVersionSelectors(): SelectorBuilder {
-        return SelectorBuilder()
-//                .environment('production')
-                .branch("dev") // load Pacts from Consumers which are tagged with "<branch>"
-//                .branch("feature/heroes_may_be_populare")
-    }
+//    @PactBrokerConsumerVersionSelectors
+//    fun consumerVersionSelectors(): SelectorBuilder {
+//        return SelectorBuilder()
+////                .environment('production')
+//                .branch("dev") // load Pacts from Consumers which are tagged with "<branch>"
+////                .branch("feature/heroes_may_be_populare")
+//    }
 
     companion object{
         const val GET_ALL = "at least one superhero exists"

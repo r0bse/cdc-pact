@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "de.schroeder"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.4-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -56,11 +56,6 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
     systemProperty("pact.rootDir", "$buildDir/pacts")
-    systemProperty("pact.verifier.publishResults", true)
-
-    systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag")) // how should a verified providertest be tagged?
-    systemProperty("pact.showFullDiff", true)
 }
 
 /**
@@ -69,8 +64,9 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-         tags = listOf("dev") //gitBranch()) //how should the ConsumerPacts (of this service) be tagged
-//        branch = gitBranch()
+        tags = listOf("dev") //gitBranch()) //how should the ConsumerPacts (of this service) be tagged
+//        consumerBranch = gitBranch()
+//        consumerVersion = "${project.version}-${getGitHash()}"
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"
@@ -98,4 +94,13 @@ fun gitBranch(): String {
         logger.warn("Unable to determine current branch: ${e.message}")
         "Unknown Branch"
     }
+}
+
+fun getGitHash(): String {
+    val stdout = ByteArrayOutputStream()
+    project.exec {
+        commandLine = "git rev-parse --short HEAD".split(" ")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }

@@ -82,13 +82,13 @@ tasks.withType<Test> {
     systemProperty("pact.verifier.publishResults", true) // wether testresults should be reported to pactBroker
 
     val pactTag = System.getProperty("pact.provider.branch")?: gitBranch()
-    val projectVersion = System.getProperty("pact.provider.version")?: project.version
+    val projectVersion = System.getProperty("pact.provider.version")?: "${project.version}"
     systemProperty("pact.provider.version", "$projectVersion")
     systemProperty("pact.showFullDiff", true)
 
-    systemProperty("pact.provider.branch", pactTag) // the current branch running the pact
-    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod
-    systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
+//    systemProperty("pact.provider.branch", pactTag) // the current branch running the pact
+//    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod
+//    systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
 }
 
 /**
