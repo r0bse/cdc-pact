@@ -1,14 +1,18 @@
 package de.schroeder.provider.boundary
 
-import au.com.dius.pact.core.model.Interaction
 import au.com.dius.pact.provider.junit5.PactVerificationContext
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider
-import au.com.dius.pact.provider.junitsupport.Consumer
 import au.com.dius.pact.provider.junitsupport.Provider
 import au.com.dius.pact.provider.junitsupport.State
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker
-import au.com.dius.pact.provider.junitsupport.target.TestTarget
-import au.com.dius.pact.provider.spring.target.MockMvcTarget
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors
+import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder
+import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget
+import com.ninjasquad.springmockk.MockkBean
+import de.schroeder.provider.control.SuperheroRepository
+import de.schroeder.provider.entity.Superhero
+import de.schroeder.provider.testutil.PostgresTestContainerTest
+import io.mockk.every
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestTemplate
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,20 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget
-import com.ninjasquad.springmockk.MockkBean
-import de.schroeder.provider.control.SuperheroRepository
-import de.schroeder.provider.entity.Superhero
-import de.schroeder.provider.testutil.PostgresTestContainerTest
-import io.mockk.every
-import org.springframework.http.ResponseEntity
 import java.util.*
+
 
 @Provider("superhero-provider-service")
 @PactBroker(
     host = "localhost",
-    port = "9292",
-//    enablePendingPacts = "true"
+    port = "9292"
 )
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -65,6 +62,17 @@ class SuperheroControllerProviderTest{
     @ExtendWith(PactVerificationInvocationContextProvider::class)
     fun testTemplate(context: PactVerificationContext) {
         context.verifyInteraction()
+    }
+
+    /**
+     * Select the Pacts to verify based on how the Consumer tagged it`s Contracts in the PactBroker
+     */
+    @PactBrokerConsumerVersionSelectors
+    fun consumerVersionSelectors(): SelectorBuilder {
+        return SelectorBuilder()
+//                .environment('production')
+                .branch("dev") // load Pacts from Consumers which are tagged with "<branch>"
+//                .branch("feature/heroes_may_be_populare")
     }
 
     companion object{

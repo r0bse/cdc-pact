@@ -70,18 +70,25 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    systemProperty("pactbroker.host", "localhost:9292")
-    systemProperty("pact.rootDir", "$buildDir/pacts")
-    systemProperty("pact.verifier.publishResults", true)
 
-    val pactTag = System.getProperty("pact.provider.branch")?:  gitBranch()
+    /**
+     * Gradle and Maven do not pass in the system properties in to the test JVM from the command line.
+     * The system properties specified on the command line only control the build JVM (the one that runs Gradle or Maven),
+     * but the tests will run in a new JVM.
+     * Therefor all properties must be set via "systemProperty"
+     */
+    systemProperty("pactbroker.host", "localhost:9292") // set up in compose.yml
+    systemProperty("pact.rootDir", "$buildDir/pacts")
+    systemProperty("pact.verifier.publishResults", true) // wether testresults should be reported to pactBroker
+
+    val pactTag = System.getProperty("pact.provider.branch")?: gitBranch()
     val projectVersion = System.getProperty("pact.provider.version")?: project.version
     systemProperty("pact.provider.version", "$projectVersion")
     systemProperty("pact.showFullDiff", true)
 
-    systemProperty("pact.provider.branch", pactTag) // ist der branch der gerade den Pact verifiziert
-    systemProperty("pactbroker.providerTags", "master") // ist der branch des Providers, der einen pending Pact als verifiziert melden darf
-    systemProperty("pactbroker.enablePending", true) // schaltet das Pending Feature frei
+    systemProperty("pact.provider.branch", pactTag) // the current branch running the pact
+    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod
+    systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
 }
 
 /**
