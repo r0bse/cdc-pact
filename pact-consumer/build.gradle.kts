@@ -1,15 +1,23 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.ByteArrayOutputStream
+
+buildscript {
+
+    System.setProperty("kotlinVersion", "1.8.10")
+    System.setProperty("springCloudVersion", "2022.0.1")
+    System.setProperty("pactVersion", "4.5.4")
+}
 
 plugins {
     id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
-    id ("au.com.dius.pact") version "4.1.19"
+    kotlin("jvm") version System.getProperty("kotlinVersion")
+    kotlin("plugin.spring") version System.getProperty("kotlinVersion")
+    id ("au.com.dius.pact") version System.getProperty("pactVersion")
 }
 
 group = "de.schroeder"
-version = "0.0.3"
+version = "0.0.4"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -17,8 +25,6 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2022.0.1"
-extra["pactVersion"] = "4.1.19"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -29,15 +35,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    testImplementation("au.com.dius.pact.consumer:junit5:${property("pactVersion")}")
-    testImplementation("au.com.dius.pact.consumer:java8:${property("pactVersion")}")
+    testImplementation("au.com.dius.pact.consumer:junit5:${System.getProperty("pactVersion")}")
     testImplementation("io.mockk:mockk:1.10.5")
     testImplementation("com.ninja-squad:springmockk:3.0.1")
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${System.getProperty("springCloudVersion")}")
     }
 }
 
@@ -51,11 +56,6 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
     systemProperty("pact.rootDir", "$buildDir/pacts")
-    systemProperty("pact.verifier.publishResults", true)
-
-    systemProperty("pact.provider.version", System.getProperty("pact.provider.version"))?: project.version
-    systemProperty("pact.provider.tag", System.getProperty("pact.provider.tag")) // how should a verified providertest be tagged?
-    systemProperty("pact.showFullDiff", true)
 }
 
 /**
@@ -64,11 +64,43 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = listOf("prod") //how should the ConsumerPacts (of this service) be tagged
+        tags = listOf("dev") //gitBranch()) //how should the ConsumerPacts (of this service) be tagged
+//        consumerBranch = gitBranch()
+        consumerVersion = "${project.version}-${getGitHash()}"
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"
         retryCountWhileUnknown=0
         retryWhileUnknownInterval=0
     }
+}
+
+/**
+ * Utility function to retrieve the name of the current git branch.
+ * Will not work if build tool detaches head after checkout, which some do!
+ */
+fun gitBranch(): String {
+    return try {
+        val byteOut = ByteArrayOutputStream()
+        project.exec {
+            commandLine = "git rev-parse --abbrev-ref HEAD".split(" ")
+            standardOutput = byteOut
+        }
+        String(byteOut.toByteArray()).trim().also {
+            if (it == "HEAD")
+                logger.warn("Unable to determine current branch: Project is checked out with detached head!")
+        }
+    } catch (e: Exception) {
+        logger.warn("Unable to determine current branch: ${e.message}")
+        "Unknown Branch"
+    }
+}
+
+fun getGitHash(): String {
+    val stdout = ByteArrayOutputStream()
+    project.exec {
+        commandLine = "git rev-parse --short HEAD".split(" ")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
