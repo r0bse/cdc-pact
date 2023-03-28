@@ -80,15 +80,12 @@ tasks.withType<Test> {
     systemProperty("pactbroker.host", "localhost:9292") // set up in compose.yml
     systemProperty("pact.rootDir", "$buildDir/pacts")
     systemProperty("pact.verifier.publishResults", true) // wether testresults should be reported to pactBroker
-
-    val pactTag = System.getProperty("pact.provider.branch")?: gitBranch()
-    val projectVersion = System.getProperty("pact.provider.version")?: "${project.version}"
-    systemProperty("pact.provider.version", "$projectVersion")
     systemProperty("pact.showFullDiff", true)
 
-//    systemProperty("pact.provider.branch", pactTag) // the current branch running the pact
-//    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod
-//    systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
+    systemProperty("pact.provider.version", "${project.version}@${getGitHash()}") // version needs to be unique in PactBroker
+    systemProperty("pact.provider.branch", gitBranch()) // the current branch running the pact
+    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod
+    systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
 }
 
 /**
@@ -119,4 +116,13 @@ fun gitBranch(): String {
         logger.warn("Unable to determine current branch: ${e.message}")
         "Unknown Branch"
     }
+}
+
+fun getGitHash(): String {
+    val stdout = ByteArrayOutputStream()
+    project.exec {
+        commandLine = "git rev-parse --short HEAD".split(" ")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
