@@ -64,7 +64,7 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        val deployEnvironment = System.getProperty("deployEnvironment")?: "dev"
+        val deployEnvironment = System.getProperty("deployEnvironment")?: gitBranch()
         tags = listOf(deployEnvironment)
         consumerBranch = gitBranch()
         consumerVersion = "${project.version}@${getGitHash()}"
