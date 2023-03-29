@@ -63,11 +63,16 @@ tasks.withType<Test> {
 }
 
 val deployEnvironment = System.getProperty("deployEnvironment")?: "prod"
+val pactConsumerVersion = "${project.version}@${getGitHash()}"
 
+/**
+ * um canIdeploy ausführen zu können, muss ein Pact für den Consumer existieren
+ * da die Version den GIT-Hash beinhaltet, muss vorher ein pactPublish erfolgen
+ */
 tasks.canIDeploy.configure {
-    pacticipant.set("superhero\\-consumer\\-service")
-    pacticipantVersion.set(project.version)
-    toProp.set(deployEnvironment) // prüft auf das Pact-Tag ab
+    pacticipant.set("superhero-consumer-service")
+    pacticipantVersion.set(pactConsumerVersion)
+    toProp.set(deployEnvironment) // prüft auf das Pact-Tag ab (alle Pacts die damit getagged und die letzte Version des Tags sind)
 }
 
 /**
@@ -78,7 +83,7 @@ pact {
         pactDirectory = "$buildDir/pacts"
         tags = listOf(deployEnvironment)
         consumerBranch = gitBranch()
-        consumerVersion = "${project.version}@${getGitHash()}"
+        consumerVersion = pactConsumerVersion
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"
