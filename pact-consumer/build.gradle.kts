@@ -62,7 +62,7 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
 }
 
-val deployEnvironment = System.getProperty("deployEnvironment")?: "prod"
+val deployEnvironment = System.getProperty("deployEnvironment")?: "dev"
 val pactConsumerVersion = "${project.version}@${getGitHash()}"
 
 /**
