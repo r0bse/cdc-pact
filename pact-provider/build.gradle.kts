@@ -84,7 +84,9 @@ tasks.withType<Test> {
 
     systemProperty("pact.provider.version", "${project.version}@${getGitHash()}") // version needs to be unique in PactBroker
     systemProperty("pact.provider.branch", gitBranch()) // the current branch running the pact
-    systemProperty("pactbroker.providerTags", "master") // the branch which is allowed to report that a pact is verified on prod (removes PENDING state)
+    val pactTag = System.getProperty("pact.provider.tag")?: "prod"
+    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
+    systemProperty("pactbroker.providerTags", "prod") // the tag which is allowed to report that a pact is verified on prod (removes PENDING state)
     systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
 }
 
