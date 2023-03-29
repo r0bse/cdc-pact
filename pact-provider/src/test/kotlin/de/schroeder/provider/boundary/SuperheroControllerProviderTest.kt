@@ -69,11 +69,11 @@ class SuperheroControllerProviderTest{
      */
     @PactBrokerConsumerVersionSelectors
     fun consumerVersionSelectors(): SelectorBuilder {
-        val deployEnvironment = System.getProperty("deployEnvironment") ?: "dev"
+        val deployEnvironment = System.getProperty("deployEnvironment") ?: "dev" // welchePacts sollen geladen werden
         val list = System.getProperties()
         return SelectorBuilder()
                 .tag("dev") // Pacts from dev stage should always tried to be verified to see if they are still PENDING
-                .tag(deployEnvironment) // load Pacts from Consumers which are tagged with "<branch>"
+                .tag(deployEnvironment) // load Pacts from Consumers which are tagged with "<tag>"
     }
 
     companion object{
