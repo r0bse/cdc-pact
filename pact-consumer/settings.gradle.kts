@@ -1,1 +1,1 @@
-rootProject.name = "consumer"
+rootProject.name = "superhero-consumer-service"

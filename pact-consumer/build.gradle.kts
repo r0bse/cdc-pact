@@ -25,6 +25,10 @@ repositories {
     mavenCentral()
 }
 
+springBoot {
+    buildInfo()
+}
+
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -58,13 +62,20 @@ tasks.withType<Test> {
     systemProperty("pact.rootDir", "$buildDir/pacts")
 }
 
+val deployEnvironment = System.getProperty("deployEnvironment")?: "prod"
+
+tasks.canIDeploy.configure {
+    pacticipant.set("superhero\\-consumer\\-service")
+    pacticipantVersion.set(project.version)
+    toProp.set(deployEnvironment) // prüft auf das Pact-Tag ab
+}
+
 /**
  * Publishing contracts to pactbroker configuration
  */
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        val deployEnvironment = System.getProperty("deployEnvironment")?: gitBranch()
         tags = listOf(deployEnvironment)
         consumerBranch = gitBranch()
         consumerVersion = "${project.version}@${getGitHash()}"
