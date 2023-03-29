@@ -64,9 +64,10 @@ tasks.withType<Test> {
 pact {
     publish {
         pactDirectory = "$buildDir/pacts"
-        tags = listOf("dev") //gitBranch()) //how should the ConsumerPacts (of this service) be tagged
-//        consumerBranch = gitBranch()
-        consumerVersion = "${project.version}-${getGitHash()}"
+        val deployEnvironment = System.getProperty("deployEnvironment")?: "dev"
+        tags = listOf(deployEnvironment)
+        consumerBranch = gitBranch()
+        consumerVersion = "${project.version}@${getGitHash()}"
     }
     broker{
         pactBrokerUrl = "http://localhost:9292"
