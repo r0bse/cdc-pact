@@ -69,9 +69,10 @@ class SuperheroControllerProviderTest{
      */
     @PactBrokerConsumerVersionSelectors
     fun consumerVersionSelectors(): SelectorBuilder {
-        val targetEnvironment = System.getenv("environment") ?: "dev"
+        val deployEnvironment = System.getProperty("deployEnvironment") ?: "dev"
+        val list = System.getProperties()
         return SelectorBuilder()
-                .branch(targetEnvironment) // load Pacts from Consumers which are tagged with "<branch>"
+                .tag(deployEnvironment) // load Pacts from Consumers which are tagged with "<branch>"
     }
 
     companion object{
