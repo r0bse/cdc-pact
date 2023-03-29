@@ -52,6 +52,7 @@ class ProviderClientConsumerTest {
             payload.stringMatcher("name", ".*", "Bruce Wayne")
             payload.stringMatcher("secretIdentity", ".*", "Batman")
             payload.stringMatcher("affiliation", ".*", "DC")
+            payload.booleanType("isPopular", true)
         }.build()
 
         return builder.given(GET_ONE)
