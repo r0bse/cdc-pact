@@ -69,7 +69,7 @@ class SuperheroControllerProviderTest{
      */
     @PactBrokerConsumerVersionSelectors
     fun consumerVersionSelectors(): SelectorBuilder {
-        val deployEnvironment = System.getProperty("deployEnvironment") ?: "prod"
+        val deployEnvironment = System.getProperty("deployEnvironment") ?: "dev"
         val list = System.getProperties()
         return SelectorBuilder()
                 .tag("dev") // Pacts from dev stage should always tried to be verified to see if they are still PENDING

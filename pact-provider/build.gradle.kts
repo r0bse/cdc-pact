@@ -29,7 +29,7 @@ plugins {
 }
 
 group = "de.schroeder"
-version = "0.0.3"
+version = "0.0.4-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 
@@ -84,8 +84,8 @@ tasks.withType<Test> {
 
     systemProperty("pact.provider.version", "${project.version}@${getGitHash()}") // version needs to be unique in PactBroker
     systemProperty("pact.provider.branch", gitBranch()) // the current branch running the pact
-    val pactTag = System.getProperty("pact.provider.tag")?: "prod"
-    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged?
+    val pactTag = System.getProperty("pact.provider.tag")?: "dev"
+    systemProperty("pact.provider.tag", pactTag) // how should a verified providertest be tagged (resolves to deployEnvironment)
     systemProperty("pactbroker.providerTags", "prod") // the tag which is allowed to report that a pact is verified on prod (removes PENDING state)
     systemProperty("pactbroker.enablePending", true) // wether Pending Pacts are activated
 }
